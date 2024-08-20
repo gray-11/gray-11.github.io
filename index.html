@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>replit</title>
+  <link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+<style>
+  #com-mod {
+    width: 70%;
+    background-color: black;
+    min-height: 150px;
+    padding: 20px;
+    text-align: center;
+    margin: auto;
+    height: auto;
+  }
+
+  #command {
+    vertical-align: middle;
+  }
+
+  input {
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+    background-color: #2e2d2d;
+    color: white;
+    border: solid white 3px;
+    transition: all 500ms;
+    width: 70%;
+    height: 50%;
+    font-size: 200%;
+  }
+
+  input:focus {
+    outline: none;
+    transform: scale(1.1);
+    transition: all 500ms;
+  }
+  #players {
+    font-family: Arial, Helvetica, sans-serif;
+    color: white;
+    width: 100%;
+  }
+</style>
+
+<body>
+  <script>
+   
+    async function sendCmd() {
+      const cmd = document.getElementById("command").value;
+      try {
+        const response = await fetch('https://api.policeroleplay.community/v1/server/command', {
+          method: 'POST',
+          headers: {
+            "Content-Type": "application/json",
+            "Server-Key": 'yCYlqxXOLb-FEZBtCOAVQgdRbvkWnVFfCwzoigyQOqATTMLztgh'
+          },
+          body: JSON.stringify({
+            "command": cmd
+          }),
+        });
+        const data = await response.json();
+      }
+      catch (err) {
+        console.error(err)
+
+      }
+      return false;
+    }
+
+    async function players() {
+      var ordered = [];
+      const list = document.getElementById("players");
+      try {
+        const response = await fetch('https://api.policeroleplay.community/v1/server/players', {
+          method: 'GET',
+          headers: {
+            "Server-Key": 'yCYlqxXOLb-FEZBtCOAVQgdRbvkWnVFfCwzoigyQOqATTMLztgh'
+          }
+        });
+        const data = await response.json();
+        list.innerHTML = `Players (${data.length})`;
+        for (var i = 0; i < data.length; i++) {
+          list.innerHTML += `<br><br>${data[i].Player} - ${data[i].Team} (${data[i].Callsign || ''}) - ${data[i].Permission}`;
+        }
+      }
+      catch (err) {
+        console.error(err)
+
+      }
+      return false;
+    }
+     setTimeout(players, 1000)
+    async function vehicles() {
+      var ordered = [];
+      const list = document.getElementById("players");
+      try {
+        const response = await fetch('https://api.policeroleplay.community/v1/server/vehicles', {
+          method: 'GET',
+          headers: {
+            "Server-Key": 'yCYlqxXOLb-FEZBtCOAVQgdRbvkWnVFfCwzoigyQOqATTMLztgh'
+          }
+        });
+        const data = await response.json();
+        list.innerHTML += `<br><br><br>Vehicles (${data.length})`;
+        for (var i = 0; i < data.length; i++) {
+          list.innerHTML += `<br><br>${data[i].Name} (${data[i].Texture}) - ${data[i].Owner}`;
+        }
+      }
+      catch (err) {
+        console.error(err)
+
+      }
+      return false;
+    }
+    setTimeout(vehicles, 7000)
+  </script>
+  <div id="com-mod">
+    <input type="text" id="command" placeholder="Command" onsubmit="return sendCmd();">
+    <p id="players">
+      test
+      <br>
+      test
+    </p>
+  </div>
+  <script src="script.js"></script>
+</body>
+<script>
+  const wage = document.getElementById("command");
+  wage.addEventListener("keydown", function (e) {
+    if (e.code === "Enter") {  //checks whether the pressed key is "Enter"
+      sendCmd();
+      wage.value = "";
+      wage.placeholder = "Success!";
+      wage.disabled = true;
+      wage.style.border = "3px solid #5aff54";
+      wage.style.textAlign = "center";
+      setTimeout(() => {
+        wage.style.border = "3px solid white";
+        wage.placeholder = "Command";
+        wage.disabled = false;
+        wage.style.textAlign = "left";
+      }, 3000)
+    }
+  });
+</script>
+
+</html>
