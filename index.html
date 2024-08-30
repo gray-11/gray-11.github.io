@@ -57,7 +57,7 @@
           method: 'POST',
           headers: {
             "Content-Type": "application/json",
-            "Server-Key": 'yCYlqxXOLb-FEZBtCOAVQgdRbvkWnVFfCwzoigyQOqATTMLztgh'
+            "Server-Key": process.env.API_KEY
           },
           body: JSON.stringify({
             "command": cmd
